@@ -2,7 +2,7 @@
  * Application.java
  * Lab01 Exercise C
  * @author Aroush Qureshi
- * submission date: July 2, 2024
+ * submission date: July 3, 2024
  * @version 1.0
  */
 
@@ -20,10 +20,10 @@ public class Application {
     	Scanner scanner = new Scanner(System.in);
         
         while (true) {
-            System.out.println("\nEnter operation (add, subtract, multiply, divide, pow, sqrt, log, log10, sin, cos, tan, factorial) or 'exit' to quit:");
-            String operation = scanner.next();
+            System.out.println("\nEnter operation (add, subtract, multiply, divide, pow, sqrt, log, log10, sin, cos, tan, factorial, permutations, nonrecursivePermutations) or 'exit' to quit:"); //prompting user to make a selection
+            String operation = scanner.next();    
             
-            if (operation.equalsIgnoreCase("exit")) {
+            if (operation.equalsIgnoreCase("exit")) { 
                 System.out.println("Exiting calculator...");
                 break;
             }
@@ -32,30 +32,53 @@ public class Application {
             if (!operation.equalsIgnoreCase("sqrt") && !operation.equalsIgnoreCase("log") && !operation.equalsIgnoreCase("log10") && !operation.equalsIgnoreCase("sin") && !operation.equalsIgnoreCase("cos") && !operation.equalsIgnoreCase("tan") && !operation.equalsIgnoreCase("factorial")) {
                 System.out.print("Enter first number: ");
                 double num1 = scanner.nextDouble();
-                System.out.print("Enter second number: ");
-                double num2 = scanner.nextDouble();
+                
+                if (operation.equalsIgnoreCase("permutations") || operation.equalsIgnoreCase("nonrecursivePermutations")) { // this if branch and the try body were generated using chatGPT but were further modified for accuracy
+                    System.out.print("Enter number of items to select: ");
+                    int num2 = scanner.nextInt();
 
-                switch (operation.toLowerCase()) {
-                    case "add":
-                        System.out.println("Result: " + add(num1, num2));
-                        break;
-                    case "subtract":
-                        System.out.println("Result: " + sub(num1, num2));
-                        break;
-                    case "multiply":
-                        System.out.println("Result: " + mult(num1, num2));
-                        break;
-                    case "divide":
-                        System.out.println("Result: " + div(num1, num2));
-                        break;
-                    case "pow":
-                        System.out.println("Result: " + power(num1, num2));
-                        break;
-                    default:
-                        System.out.println("Invalid operation.");
-                        break;
+                    try {    // processing which operation selection was made and calling the appropriate method to perform the operation
+                        switch (operation.toLowerCase()) {
+                            case "permutations":
+                                System.out.println("Result: " + permutations((int) num1, num2));
+                                break;
+                            case "nonrecursivepermutations":
+                                System.out.println("Result: " + nonrecursivepermutations((int) num1, num2));
+                                break;
+                            default:
+                                System.out.println("Invalid operation.");
+                                break;
+                        }
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage());
+                    }
+                } else {
+	                
+	                System.out.print("Enter second number: ");
+	                double num2 = scanner.nextDouble();
+	
+	                switch (operation.toLowerCase()) {
+	                    case "add":
+	                        System.out.println("Result: " + add(num1, num2));
+	                        break;
+	                    case "subtract":
+	                        System.out.println("Result: " + sub(num1, num2));
+	                        break;
+	                    case "multiply":
+	                        System.out.println("Result: " + mult(num1, num2));
+	                        break;
+	                    case "divide":
+	                        System.out.println("Result: " + div(num1, num2));
+	                        break;
+	                    case "pow":
+	                        System.out.println("Result: " + power(num1, num2));
+	                        break;
+	                    default:
+	                        System.out.println("Invalid operation.");
+	                        break;
+	                }
                 }
-            } else {
+               } else {
                 // For operations requiring one input
                 System.out.print("Enter number: ");
                 double num = scanner.nextDouble();
@@ -176,6 +199,41 @@ public class Application {
     // Tangent function
     public static double tan(double angleRadians) { //method to perform tan operation
         return Math.tan(Math.toRadians(angleRadians)); //toRadians ensures that the angle is in radians 
+    }
+    
+    // Recursive method to calculate permutations       
+    public static int permutations(int totalItems, int selectedItems) { // this method was generated using chatGPT but was further modified for accuracy
+        if (totalItems < 0) { // condition that checks if total number of elements is positive
+            throw new IllegalArgumentException("Invalid. Cannot have total number of elements be negative."); 
+        }
+        if (selectedItems < 0 || selectedItems > 100) { // condition that ensures number of items to be permuted is between 0 and 100
+            throw new IllegalArgumentException("Invalid. Number of items to be selected must be between 0 and 100.");
+        }
+        if (selectedItems > totalItems) { // condition that ensures number of selected items to be permuted is less than the total number of elements
+            throw new IllegalArgumentException("Invalid. Number of items to be selected cannot be more than the total number of elements.");
+        }
+        if (selectedItems == 0) { // performs a permutation in which 0 items are to be permuted
+            return 1;
+        }
+        return totalItems * permutations(totalItems - 1, selectedItems - 1); // recursively calling the function to iterate and perform permutations
+    }
+
+    // Non-recursive method to calculate permutations
+    public static int nonrecursivepermutations(int totalElements, int selectItems) { // this method was generated using chatGPT but was further modified for accuracy
+        if (totalElements < 0) { // condition that checks if total number of elements is positive
+            throw new IllegalArgumentException("Invalid. Cannot have total number of elements be negative..");
+        }
+        if (selectItems < 0 || selectItems > 100) { // condition that ensures number of items to be permuted is between 0 and 100
+            throw new IllegalArgumentException("Invalid. Number of items to be selected must be between 0 and 100.");
+        }
+        if (selectItems > totalElements) { // condition that ensures number of selected items to be permuted is less than the total number of elements
+            throw new IllegalArgumentException("Invalid. Number of items to be selected cannot be more than the total number of elements.");
+        }
+        int result = 1;
+        for (int i = 0; i < selectItems; i++) {  // instead of recursively calling the function, a for loop is used to iterate and perform the permutations
+            result *= (totalElements - i);
+        }
+        return result;
     }
 
     
