@@ -7,7 +7,6 @@
  */
 
 package com.aroush.calculator;
-
 import java.util.Scanner;
 
 /**
@@ -28,7 +27,7 @@ public class Application {
             // Further processing based on operation
 
             
-            switch (operation.toLowerCase()) { // switch is used to identify and execute the operation the user requested
+            switch (operation.toLowerCase()) { // switch is used to identify and execute the requested operation 
 	            case "add":
 	                System.out.println("Enter the first operand: ");
 	                double num1 = scanner.nextDouble();    //scans next token of input as a double 
@@ -39,8 +38,13 @@ public class Application {
 	                
 	            case "factorial":
 	                System.out.println("Enter a number: ");
-	                double number = scanner.nextDouble(); //scans next token of input as a double
-	                System.out.println("Result: " + factorial(number)); // calls on the relevant operation method to compute the answer
+	                if (scanner.hasNextInt()) {
+	                	int number = scanner.nextInt();
+	                			System.out.println("Result: " + factorial(number)); // calls on the relevant operation method to compute the answer
+	                } else {
+	                	System.out.println("Invalid input. Please select a positive integer.");
+	                }
+	               
 	                break;
 	                
 	            case "subtract":
@@ -71,6 +75,10 @@ public class Application {
 	            	double numb2 = scanner.nextDouble();
 	            	System.out.println("Result: " + mult(numb1, numb2)); // calls on the relevant operation method to compute the answer
 	            	break;
+	            	
+	           default:
+	        	   System.out.println("Unknown operation. Please try again.");
+	        	   break;
             }
 	            	
 	            	
@@ -107,5 +115,27 @@ public class Application {
         }
     	return result;
     }
+    
+  
+    
+   /** // Factorial calculation with progress display
+    public static long factorial(int num) {
+        if (num < 0) {
+            System.out.println("Factorial of negative number is undefined.");
+            return 0;
+        }
+        return factorialHelper(num, num);
+    }
+
+    private static long factorialHelper(int originalNum, int num) {
+        if (num <= 1) {
+            return 1;
+        }
+        // Calculate progress and update progress bar
+        int progress = (int) (((originalNum - num) / (double) originalNum) * 100);
+        System.out.print("\rCalculating factorial: " + progress + "\n");
+        return num * factorialHelper(originalNum, num - 1);
+    } **/
+
     
 }
